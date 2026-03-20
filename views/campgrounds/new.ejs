@@ -7,14 +7,32 @@
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="campground[title]" required>
+                <div class="valid-feedback">
+                    Yep, that's right!
+                </div>
+                <div class="invalid-feedback">
+                    That doesn't seem like a Campground Name
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type="text" id="location" name="campground[location]" required>
+                <div class="valid-feedback">
+                    Yep, that's right!
+                </div>
+                <div class="invalid-feedback">
+                    That doesn't seem like a Campground Location
+                </div>
             </div> 
             <div class="mb-3">
                 <label class="form-label" for="image">Show Url</label>
                 <input class="form-control" type="text" id="location" name="campground[image]" required>
+                <div class="valid-feedback">
+                    Yep, that's right!
+                </div>
+                <div class="invalid-feedback">
+                    That doesn't seem like a Campground Image
+                </div>
             </div> 
             <div class="mb-3">
                 <label class="form-label" for="price">Campground Price</label>
@@ -22,11 +40,23 @@
                     <span class="input-group-text" id="price-label ">$</span>
                     <input type="text" class="form-control" id= "price" placeholder="0" 
                     aria-label="price" aria-describedby="price-label" name="campground[price]" required>
+                    <div class="valid-feedback">
+                    Yep, that's right!
+                </div>
+                <div class="invalid-feedback">
+                    That doesn't seem like a Campground Price
+                </div>
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type="text" id="location" name="campground[description]" required></textarea> 
+                <div class="valid-feedback">
+                    Yep, that's right!
+                </div>
+                <div class="invalid-feedback">
+                    That doesn't seem like a Campground Description
+                </div>
             </div> 
             <div class="mb-3">
                 <button class="btn btn-success">Add Campground</button>
@@ -35,26 +65,3 @@
         <a href="/campgrounds">All Campgrounds</a>
     </div>
 </div>
-
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-  'use strict'
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.querySelectorAll('.validated-form')
-
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()
-</script>
