@@ -13,26 +13,11 @@ const catchAsync = require('../utils/catchAsync')
 const { reviewSchema, campgroundSchema } = require('../schemas')
 
 const {validateReview, isLoggedIn, isReviewAuthor} = require('../middleware')
- 
-router.post('/', validateReview, isLoggedIn, catchAsync(async(req,res) =>{
-    console.log(req.params)
-    const campground = await Campground.findById(req.params.id)
-    const review = new Review(req.body.review)// from review[body] in html
-    review.author = req.user._id
-    campground.reviews.push(review)
-    await review.save()
-    await campground.save()
-    req.flash('success', 'Created a New Review!')
-    res.redirect(`/campgrounds/${campground._id}`) 
-}))
 
-router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async(req, res)=>{
-    const {id, reviewId} = req.params
-    // $pull will pull a value from array
-    await Campground.findByIdAndUpdate(id, {$pull:{reviews:reviewId}})
-    await Review.findByIdAndDelete(reviewId)
-    req.flash('success', 'Successfully Deleted a Review')
-    res.redirect(`/campgrounds/${id}`)
-}))
+const reviews = require('../controllers/reviews')
+ 
+router.post('/', validateReview, isLoggedIn, catchAsync(reviews.createReview))
+
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview))
 
 module.exports = router
