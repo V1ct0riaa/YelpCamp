@@ -3,7 +3,8 @@
 <div class="row">
     <h1 class="text-center">New Campground</h1>
     <div class="col-6 offset-3">
-        <form action="/campgrounds" method="POST" class="validated-form" novalidate>
+        <form action="/campgrounds" method="POST" class="validated-form" novalidate
+        enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="campground[title]" required>
@@ -24,16 +25,8 @@
                     That doesn't seem like a Campground Location
                 </div>
             </div> 
-            <div class="mb-3">
-                <label class="form-label" for="image">Show Url</label>
-                <input class="form-control" type="text" id="location" name="campground[image]" required>
-                <div class="valid-feedback">
-                    Yep, that's right!
-                </div>
-                <div class="invalid-feedback">
-                    That doesn't seem like a Campground Image
-                </div>
-            </div> 
+
+
             <div class="mb-3">
                 <label class="form-label" for="price">Campground Price</label>
                 <div class="input-group">
@@ -58,6 +51,16 @@
                     That doesn't seem like a Campground Description
                 </div>
             </div> 
+
+            <div class="mb-3">
+                <div class="form-file custom-file">
+                    <label for="image" class="form-label">
+                        <span class="form-file-text custom-file-label">Choose Image</span>
+                    </label>
+                    <input class="form-control" type="file" id="image" name="image" multiple>
+                </div>
+            </div>
+            
             <div class="mb-3">
                 <button class="btn btn-success">Add Campground</button>
             </div>

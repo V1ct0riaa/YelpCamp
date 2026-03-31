@@ -9,10 +9,12 @@ module.exports.renderNewForm = (req,res) => {
     res.render('campgrounds/new')
 }
 
-module.exports.createCampground = async (req, res, next) => {    
+module.exports.createCampground = async (req, res, next) => {
     const campground = new Campground(req.body.campground);
+    campground.images = req.files.map(f => ({url: f.path, filename: f.filename}))
     campground.author = req.user._id
     await campground.save();
+    console.log(campground)
     // flash is usually used with redirect
     req.flash('success', 'Successfully made a new Campground')
     res.redirect(`/campgrounds/${campground._id}`)
@@ -46,7 +48,16 @@ module.exports.renderEditform = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
+    console.log(req.body)
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const imgs = req.files.map(f => ({url: f.path, filename: f.filename}))
+    campground.images.push(...imgs) //...take data from array and push
+    await campground.save()
+    if (req.body.deleteImages){
+        // pull from images array where the images in req.body.deleteImages
+        await campground.updateOne({$pull: {images: {filename: {$in: req.body.deleteImages}}}})
+        console.log(campground)
+    }
     req.flash('success', 'Successfully updated campground!')
     res.redirect(`/campgrounds/${campground._id}`)
 }
