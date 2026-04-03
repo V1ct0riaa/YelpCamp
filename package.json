@@ -40,6 +40,7 @@
     "escape-string-regexp": "^1.0.5",
     "etag": "^1.8.1",
     "express": "^4.22.1",
+    "express-mongo-sanitize": "^2.2.0",
     "express-session": "^1.19.0",
     "filelist": "^1.0.1",
     "finalhandler": "^1.1.2",
@@ -108,7 +109,8 @@
     "vary": "^1.1.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node seeds/index.js"
   },
   "repository": {
     "type": "git",

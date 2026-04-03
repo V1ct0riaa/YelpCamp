@@ -32,7 +32,7 @@ const seedDB = async () => {
                     cities[random1000].longitude,
                     cities[random1000].latitude,
                 ]
-            },e
+            },
             images: [
                 {
                     url: 'https://res.cloudinary.com/dqaesraex/image/upload/v1774937138/YelpCamp/jgqrpmvnue9wssad51uq.jpg',
