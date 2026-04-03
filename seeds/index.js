@@ -3,7 +3,7 @@ const cities = require('./cities');
 const { places, descriptors } = require('./seedHelpers');
 const Campground = require('../models/campground');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp');
+mongoose.connect('mongodb://localhost:27017/yelp-camp-maptiler');
 
 const db = mongoose.connection;
 
@@ -26,6 +26,13 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(places)}`,
             description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt dignissimos  fugiat aliquam atque ipsa tenetur est recusandae nostrum sint? Rem, adipisci? Doloribus non ipsum omnis, quas dicta doloremque impedit culpa',
             price,
+            geometry: {
+                type: "Point",
+                coordinates: [
+                    cities[random1000].longitude,
+                    cities[random1000].latitude,
+                ]
+            },e
             images: [
                 {
                     url: 'https://res.cloudinary.com/dqaesraex/image/upload/v1774937138/YelpCamp/jgqrpmvnue9wssad51uq.jpg',
