@@ -29,6 +29,13 @@ module.exports.validateCampground = (req,res,next) =>{
     }
 }
 
+module.exports.validateCampgroundImages = (req, res, next) => {
+    if (!req.files || req.files.length === 0) {
+        throw new ExpressError('At least one image is required', 400)
+    }
+    next()
+}
+
 module.exports.isAuthor = async(req,res,next) => {
     const {id} = req.params
     const campground = await Campground.findById(id)

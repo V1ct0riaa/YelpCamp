@@ -70,11 +70,12 @@ module.exports.updateCampground = async (req, res) => {
         return res.redirect(`/campgrounds/${id}/edit`);
     }
 
+    const campground = await Campground.findById(id);
+    campground.set({ ...req.body.campground });
     campground.geometry = geoData.features[0].geometry;
     campground.location = geoData.features[0].place_name;
 
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    const imgs = req.files.map(f => ({url: f.path, filename: f.filename}))
+    const imgs = req.files ? req.files.map(f => ({ url: f.path, filename: f.filename })) : [];
     campground.images.push(...imgs) //...take data from array and push
     await campground.save()
     if (req.body.deleteImages){

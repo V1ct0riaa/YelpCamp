@@ -1,7 +1,8 @@
-if(process.env.NODE_ENV !== "production"){
-    require('dotenv').config()
-}
+// if(process.env.NODE_ENV !== "production"){
+//     require('dotenv').config()
+// }
 
+require('dotenv').config()
 
 
 const express = require('express');
@@ -10,15 +11,16 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate')
 const session = require('express-session')
 const flash = require('connect-flash')
+const mongoSanitize = require('express-mongo-sanitize');
 const ExpressError = require('./utils/ExpressError')
 const methodOverride = require('method-override');
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user')
-
 const userRoutes = require('./routes/users')
 const campgroundRoutes = require('./routes/campgrounds')
-const reviewRoutes = require('./routes/reviews')
+const reviewRoutes = require('./routes/reviews');
+const helmet = require('helmet');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp-maptiler');
 
@@ -38,8 +40,10 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public'))) // to serve public static files
+app.use(mongoSanitize());
 
 const sessionConfig = {
+    name: 'session',
     secret: 'thisshouldbeabettersecret',
     resave: false,
     saveUninitialized: true,
@@ -52,6 +56,49 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig))
 app.use(flash())
+
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+    "https://cdn.maptiler.com/",
+    "https://unpkg.com/",
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net",
+    "https://cdn.maptiler.com/",
+    "https://unpkg.com/",
+];
+const connectSrcUrls = [
+    "https://api.maptiler.com/",
+];
+const imgSrcUrls = [
+    "https://res.cloudinary.com/",
+    "https://images.unsplash.com/",
+    "https://cdn.maptiler.com/",
+];
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: ["'self'", "data:", "blob:", ...imgSrcUrls, "https://api.maptiler.com/"],
+            fontSrc: ["'self'", ...styleSrcUrls],
+            connectSrc: ["'self'", ...connectSrcUrls],
+        },
+    })
+)
+
+
 
 app.use(passport.initialize()) // turns on passport for every incoming request
 app.use(passport.session()) // session based login state and restores it to req.user
@@ -66,7 +113,7 @@ passport.serializeUser(User.serializeUser()) // after login, saves user identity
 // how do we get user out of the session
 passport.deserializeUser(User.deserializeUser()) // logout, restores user identity from session
 
-app.use((req,res,next) =>{
+app.use((req, res, next) => {
     // take current user
     res.locals.currentUser = req.user
     // take whatever in the flash under success
@@ -86,13 +133,13 @@ app.get('/', (req, res) => {
 
 
 app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found',404))
+    next(new ExpressError('Page Not Found', 404))
 })
 
-app.use((err,req,res,next) =>{
-    const {statusCode = 500} = err
-    if(!err.message) err.message = 'Oh no something went wrong'
-    res.status(statusCode).render('error', {err})
+app.use((err, req, res, next) => {
+    const { statusCode = 500 } = err
+    if (!err.message) err.message = 'Oh no something went wrong'
+    res.status(statusCode).render('error', { err })
 });
 
 app.listen(3000, () => {
