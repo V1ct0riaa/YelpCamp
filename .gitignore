@@ -30,3 +30,12 @@ build/
 
 # macOS
 .DS_Store
+
+# Vercel
+.vercel/
+
+# Editor temp files
+*.swp
+*.swo
+*.tmp
+.vercel
